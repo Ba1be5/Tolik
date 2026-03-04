@@ -1,5 +1,9 @@
-from services.main import main
+from app.core.logger import get_logger
+from app.services.service import main
 
-print('Готов к работе!')
+logger = get_logger(__name__)
+
+
+
 if __name__ == '__main__':
     main()
