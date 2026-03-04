@@ -37,7 +37,7 @@ def recognize(data, vectorizer, clf):
     # Получение имени функции из ответа из data_set
     func_name = answer.split()[0]
     commands = {"passive": passive}
-    commands.get(func_name, lambda: print("Unknown command"))()
+    commands.get(func_name, lambda: logger.debug("Unknown command"))()
 
 
 def main():
