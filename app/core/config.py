@@ -2,6 +2,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
+    TRIGGERS_NAMES: set[str]
 
     LOG_LEVEL: str
 

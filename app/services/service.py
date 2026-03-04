@@ -1,12 +1,14 @@
+import json
+import queue
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.linear_model import LogisticRegression
 import sounddevice as sd
 import vosk
-import json
-import queue
-import app.core.dictionary as dictionary
-from app.services.functions import *
+
+from app.core import dictionary
+from app.core.config import settings
 from app.core.logger import get_logger
+from app.services.functions import *
 
 
 q = queue.Queue() # Получаем частоту микрофона
@@ -19,7 +21,7 @@ def callback(indata, frames, time, status):
 
 def recognize(data, vectorizer, clf):
     # Проверяем есть ли имя бота в data, если нет, то return
-    trg = dictionary.Triggers.intersection(data.split())
+    trg = settings.TRIGGERS_NAMES.intersection(data.split())
     if not trg:
         return
 
