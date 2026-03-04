@@ -62,4 +62,5 @@ def main():
             data = q.get()
             vock_result = vosk_model.recognize(data)
             if vock_result:
+                logger.info(f"Распознан текст: {vock_result}")
                 recognize(vock_result, vectorizer, clf)

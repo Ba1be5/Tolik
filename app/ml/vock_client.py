@@ -13,9 +13,7 @@ class VoskModel:
 
     def recognize(self, data: bytes):
         if self.rec.AcceptWaveform(data):
-            logger.debug(f"Распознано: {self.rec.Result()}")
             result = json.loads(self.rec.Result())['text']
             return result
         else:
-            logger.debug("Распознавание не удалось")
             return None
