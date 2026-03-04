@@ -8,6 +8,7 @@ import vosk
 from app.core import dictionary
 from app.core.config import settings
 from app.core.logger import get_logger
+from app.ml.vock_client import VoskModel
 from app.services.functions import *
 
 
@@ -40,7 +41,6 @@ def recognize(data, vectorizer, clf):
 
 
 def main():
-    model = vosk.Model('ASR_MODEL')
     device = sd.default.device
     samplerate = int(sd.query_devices(device[0], 'input')['default_samplerate']) 
 
@@ -54,13 +54,12 @@ def main():
     del dictionary.data_set
 
     # Постоянная прослушка микрофона
-    with sd.RawInputStream(samplerate=samplerate, blocksize = 16000, device=device[0], dtype='int16',
-                                channels=1, callback=callback):
+    with sd.RawInputStream(samplerate = samplerate, blocksize = 16000, device = device[0], dtype = 'int16', channels = 1, callback = callback):
 
-        rec = vosk.KaldiRecognizer(model, samplerate)
+        vosk_model = VoskModel(samplerate=samplerate)  # Инициализация модели распознавания речи
         logger.info("Система запущена и готова к распознаванию речи.")
         while True:
             data = q.get()
-            if rec.AcceptWaveform(data):
-                data = json.loads(rec.Result())['text']
-                recognize(data, vectorizer, clf)
+            vock_result = vosk_model.recognize(data)
+            if vock_result:
+                recognize(vock_result, vectorizer, clf)
